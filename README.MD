@@ -11,8 +11,8 @@
 3. [urfave/negroni](https://github.com/urfave/negroni)
 3. [satori/go.uuid](http://github.com/satori/go.uuid)
 
+### RPC JSON request
 
-### RPC JSON request 
 ```shell
 curl -X POST \
 http://localhost:1234/rpc \
@@ -28,6 +28,16 @@ http://localhost:1234/rpc \
 ```
 
 or :
+
 ```shell
 curl -X POST http://localhost:1234/rpc -H 'cache-control: no-cache' -H 'content-type: application/json' -d '{"method": "JSONServer.GiveBookDetail","params": [{"Id": "1234"}],"id": "1"}
 ```
+
+## chapter4
+
+### Popular Go Frameworks
+
+1. [go-restful](https://github.com/emicklei/go-restful)
+2. [go-restful-swagger12](https://github.com/emicklei/go-restful-swagger12)
+3. [gin](https://github.com/gin-gonic/gin)
+3. [revel](https://github.com/revel/revel)

@@ -41,3 +41,45 @@ curl -X POST http://localhost:1234/rpc -H 'cache-control: no-cache' -H 'content-
 2. [go-restful-swagger12](https://github.com/emicklei/go-restful-swagger12)
 3. [gin](https://github.com/gin-gonic/gin)
 3. [revel](https://github.com/revel/revel)
+
+## chapter5
+
+最终使用[mongo-go-driver](https://github.com/mongodb/mongo-go-driver) 替代书中的[mgo](https://gopkg.in/mgo.v2)
+
+### mongoDB命令记录
+
+```
+use movies;
+
+db.movies.insertOne({ _id: 5, name: 'Star Trek', year: 2009, directors: ['J.J. Abrams'], writers: ['Roberto Orci', 'Alex Kurtzman'], boxOffice: { budget:150000000, gross:257704099 } } )
+
+db.movies.insertOne({ name: 'The Dark Knight ', year: 2008, directors: ['Christopher Nolan'], writers: ['Jonathan Nolan', 'Christopher Nolan'], boxOffice: { budget:185000000, gross:533316061 } } )
+
+db.movies.findOne();
+
+db.movies.find();
+
+db.movies.find({year : {$eq : 2008}})
+
+db.movies.find({year: 2008})
+
+db.movies.find({'boxOffice.budget': {$gt : 150000000}})
+
+db.movies.find({'boxOffice.budget': {$gt : 150000000}, year:2009})
+
+db.movies.find({$or: [{'boxOffice.budget': {$gt : 150000000}}, {year:2009}]})
+
+db.movies.deleteOne({"_id" : ObjectId('625c2ccadb210749da806846')})
+
+```
+
+#### 其他操作关键字
+
+| Operator | Function              |
+| -------- | --------------------- |
+| $lt      | Less than             |
+| $gt      | Greater than          |
+| $in      | In the                |
+| $lte     | Less than or equal to |
+| $ne      | Not equal to          |
+

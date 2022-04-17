@@ -2,6 +2,24 @@
 
 学习《Building RESTful Web services with Go》的练习代码
 
+
+## project init
+
+```shell
+
+mkdir brwswg
+
+cd brwswg
+
+go mod init github.com/guozhe001/brwswg
+
+go get go.mongodb.org/mongo-driver/mongo
+
+# 删除未使用的依赖项
+go mod tidy
+
+```
+
 ## chapter3
 
 ### 中间件

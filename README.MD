@@ -89,6 +89,9 @@ db.movies.find({$or: [{'boxOffice.budget': {$gt : 150000000}}, {year:2009}]})
 
 db.movies.deleteOne({"_id" : ObjectId('625c2ccadb210749da806846')})
 
+# 创建索引
+db.movies.createIndex({year : 1})
+
 ```
 
 #### 其他操作关键字

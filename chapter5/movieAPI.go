@@ -3,7 +3,6 @@ package main
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 	"github.com/gorilla/mux"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -12,7 +11,6 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
-	"strconv"
 	"time"
 )
 
@@ -36,14 +34,6 @@ type Movie struct {
 type BoxOffice struct {
 	Budget uint64 `json:"budget" bson:"budget"`
 	Gross  uint64 `json:"gross" bson:"gross"`
-}
-
-func Hex2Dec(val string) uint64 {
-	n, err := strconv.ParseUint(val, 16, 32)
-	if err != nil {
-		fmt.Println(err)
-	}
-	return n
 }
 
 func (d *DB) GetMovie(w http.ResponseWriter, r *http.Request) {

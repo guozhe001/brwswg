@@ -57,6 +57,45 @@ func (d *DB) GetMovie(w http.ResponseWriter, r *http.Request) {
 
 }
 
+func (d *DB) DeleteMovie(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	w.WriteHeader(http.StatusOK)
+	id, err := primitive.ObjectIDFromHex(vars["id"])
+	if err != nil {
+		log.Println(err)
+		w.Write([]byte(err.Error()))
+	}
+	_, err = d.collection.DeleteOne(d.ctx, bson.M{"_id": id})
+	if err != nil {
+		log.Println(err)
+		w.Write([]byte(err.Error()))
+	} else {
+		w.Header().Set("Content-Type", "text")
+		w.Write([]byte("delete successfully!"))
+	}
+}
+
+func (d *DB) UpdateMovie(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	w.WriteHeader(http.StatusOK)
+	id, err := primitive.ObjectIDFromHex(vars["id"])
+	if err != nil {
+		log.Println(err)
+		w.Write([]byte(err.Error()))
+	}
+	var movie Movie
+	postBody, _ := ioutil.ReadAll(r.Body)
+	json.Unmarshal(postBody, &movie)
+	_, err = d.collection.UpdateOne(d.ctx, bson.M{"_id": id}, bson.M{"$set": movie})
+	if err != nil {
+		log.Println(err)
+		w.Write([]byte(err.Error()))
+	} else {
+		w.Header().Set("Content-Type", "text")
+		w.Write([]byte("update successfully!"))
+	}
+}
+
 func (d *DB) CreateMovie(w http.ResponseWriter, r *http.Request) {
 	var movie Movie
 	postBody, _ := ioutil.ReadAll(r.Body)
@@ -84,8 +123,10 @@ func main() {
 	c := client.Database("appdb").Collection("movies")
 	db = &DB{client: client, ctx: ctx, collection: c}
 	r := mux.NewRouter()
-	r.HandleFunc("/v1/movies/{id:[a-zA-Z0-9]*}", db.GetMovie).Methods("GET")
+	r.HandleFunc("/v1/movies/{id:[a-zA-Z0-9]*}", db.GetMovie).Methods(http.MethodGet)
 	r.HandleFunc("/v1/movies", db.CreateMovie).Methods(http.MethodPost)
+	r.HandleFunc("/v1/movies/{id:[a-zA-Z0-9]*}", db.DeleteMovie).Methods(http.MethodDelete)
+	r.HandleFunc("/v1/movies/{id:[a-zA-Z0-9]*}", db.UpdateMovie).Methods(http.MethodPut)
 	s := &http.Server{
 		Handler:      r,
 		Addr:         ":8088",

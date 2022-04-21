@@ -2,7 +2,6 @@
 
 学习《Building RESTful Web services with Go》的练习代码
 
-
 ## project init
 
 ```shell
@@ -97,10 +96,92 @@ db.movies.createIndex({year : 1})
 #### 其他操作关键字
 
 | Operator | Function              |
-| -------- | --------------------- |
+|----------|-----------------------|
 | $lt      | Less than             |
 | $gt      | Greater than          |
 | $in      | In the                |
 | $lte     | Less than or equal to |
 | $ne      | Not equal to          |
 
+## chapter5
+
+#### Go内置数据类型与Protobuf类型不一样的类型对应关系表：
+
+| Go type | Protobuf type |
+|---------|---------------|
+| float32 | float         |
+| float64 | double        |
+| uint32  | fixed32       |
+| uint64  | fixed64       |
+| []byte  | bytes         |
+
+
+#### Protobuf类型的默认值
+
+| Protobuf type                 | Default value |
+|-------------------------------|---------------|
+| string                        | ""            |
+| bytes                         | empty bytes[] |
+| bool                          | false         |
+| int, int32,int64,float,double | 0             |
+| enum                          | 0             |
+
+
+
+#### Go程序中如何使用Protobuf
+
+![image-20220421223358457](https://cdn.jsdelivr.net/gh/guozhe001/oss//imgimage-20220421223358457.png)
+
+
+#### 错误记录:"protoc-gen-go: program not found or is not executable"
+
+```shell
+$  protoc --go_out=. *.proto                                   
+
+protoc-gen-go: program not found or is not executable
+Please specify a program using absolute path or make sure the program is available in your PATH system variable
+--go_out: protoc-gen-go: Plugin failed with status code 1.
+
+```
+
+**解决方案**
+1. 配置GO环境变量如下：
+
+   ```shell
+   export GOROOT=/usr/local/go
+   export GOPATH=$HOME/go
+   export GOBIN=$GOPATH/bin
+   export PATH=$PATH:$GOROOT:$GOPATH:$GOBIN
+   ```
+   
+2. 安装`go install google.golang.org/protobuf/cmd/protoc-gen-go@latest`包
+
+参考文档：https://developers.google.com/protocol-buffers/docs/gotutorial
+
+
+
+#### 错误记录：unable to determine Go import path for "person.proto"
+
+```shell
+$ protoc --go_out=. person.proto                                
+protoc-gen-go: unable to determine Go import path for "person.proto"
+
+Please specify either:
+        • a "go_package" option in the .proto source file, or
+        • a "M" argument on the command line.
+
+See https://developers.google.com/protocol-buffers/docs/reference/go-generated#package for more information.
+
+--go_out: protoc-gen-go: Plugin failed with status code 1.
+
+```
+**解决方案**
+在person.proto中执行go_package:
+```protobuf
+option go_package = "./";
+```
+
+参考文档：https://stackoverflow.com/questions/70586511/protoc-gen-go-unable-to-determine-go-import-path-for-simple-proto
+
+#### protocol buffers和JSON比较有什么好处？
+1. protocol buffers编译成二进制文本小于JSON文本

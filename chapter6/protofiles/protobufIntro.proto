@@ -1,0 +1,48 @@
+syntax = "proto3";
+
+package protofiles;
+
+option go_package="./";
+
+
+message Schedule {
+  // Enumerations provide the ordering of numbers for a given set of elements. The default order of values is from zero to n.
+  enum Days {
+    SUNDAY = 0;
+    MONDAY = 1;
+    TUESDAY = 2;
+    WEDNESDAY = 3;
+    THURSDAY = 4;
+    FRIDAY = 5;
+    SATURDAY = 6;
+  }
+
+  // Protobuf3 allows an option called allow aliases to assign two different members the same value.
+  // 如果需要定义全部不相同的tag，则需要把option allow_alias = true;删除，否则会报编译错误
+  enum EnumAllowingAlias {
+    option allow_alias = true;
+    UNKNOWN = 0;
+    STARTED = 1;
+    RUNNING = 1;
+  }
+}
+//
+//message Site {
+//  string url = 1;
+//  int64 latency = 2;
+//  // proxies代表这个字段是一个array/list，such as ["100.104.112.10", "100.104.112.12"]
+//  repeated string proxies = 3;
+//}
+
+
+// 嵌套消息
+message Site {
+  string url = 1;
+  int64 latency = 2;
+  repeated Proxy proxies = 3;
+}
+
+message Proxy {
+  string utl = 1;
+  int64 latency = 2;
+}

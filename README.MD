@@ -130,7 +130,7 @@ db.movies.createIndex({year : 1})
 
 #### Go程序中如何使用Protobuf
 
-![image-20220421223358457](https://cdn.jsdelivr.net/gh/guozhe001/oss//imgimage-20220421223358457.png)
+![image-20220421223358457](https://cdn.jsdelivr.net/gh/guozhe001/oss/imgimage-20220421223358457.png)
 
 
 #### 错误记录:"protoc-gen-go: program not found or is not executable"
@@ -176,7 +176,8 @@ See https://developers.google.com/protocol-buffers/docs/reference/go-generated#p
 
 ```
 **解决方案**
-在person.proto中执行go_package:
+在person.proto中添加go_package:
+
 ```protobuf
 option go_package = "./";
 ```
@@ -185,3 +186,14 @@ option go_package = "./";
 
 #### protocol buffers和JSON比较有什么好处？
 1. protocol buffers编译成二进制文本小于JSON文本
+
+#### 在使用`protoc --go_out`命令编译proto文件时没有service的注册方法
+
+**解决方案**
+```shell
+# 依次执行下面两个命令
+protoc --go_out=. transaction.proto            
+protoc --go-grpc_out=. transaction.proto
+```
+
+#### Type cannot implement 'MoneyTransactionServer' as it has a non-exported method and is defined in a different package

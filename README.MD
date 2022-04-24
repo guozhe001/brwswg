@@ -192,8 +192,10 @@ option go_package = "./";
 **解决方案**
 ```shell
 # 依次执行下面两个命令
-protoc --go_out=. transaction.proto            
+protoc --go_out=. transaction.proto
 protoc --go-grpc_out=. transaction.proto
+# 或者合并成一条命令：
+protoc --go_out=. --go-grpc_out=. transaction.proto
 ```
 
 #### Type cannot implement 'MoneyTransactionServer' as it has a non-exported method and is defined in a different package
